@@ -56,7 +56,7 @@ email = st.text_input("Email")
 if st.button("Submit"):
     if first_name and last_name and email:
         # --- Google Sheets setup ---
-        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        scope = ["https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive"]
         creds = ServiceAccountCredentials.from_json_keyfile_name("decomm.json", scope)
         client = gspread.authorize(creds)
 
