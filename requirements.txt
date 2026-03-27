@@ -3,3 +3,6 @@ pandas
 matplotlib
 gspread
 oauth2client
+sqlalchemy
+psycopg2-binary  # for PostgreSQL
+pandas
