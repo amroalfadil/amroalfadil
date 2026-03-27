@@ -57,8 +57,8 @@ if st.button("Submit"):
     if first_name and last_name and email:
         # --- Google Sheets setup ---
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name("streamlit-gsheet-491513-f99372b33541.json", scope)
-        client = gspread.authorize(creds)
+        creds = ServiceAccountCredentials.from_json_keyfile_name("decomm.json", scope)
+        client = gspread.authorize("streamlit-gsheet-491513-5de83d6f2d9a")
 
         # Open your Google Sheet by name
         sheet = client.open("streamlit-sheets").sheet1
