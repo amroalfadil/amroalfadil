@@ -58,7 +58,7 @@ if st.button("Submit"):
         # --- Google Sheets setup ---
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
         creds = ServiceAccountCredentials.from_json_keyfile_name("decomm.json", scope)
-        client = gspread.authorize("streamlit-gsheet-491513-5de83d6f2d9a")
+        client = gspread.authorize(creds)
 
         # Open your Google Sheet by name
         sheet = client.open("streamlit-sheets").sheet1
