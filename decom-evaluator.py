@@ -39,3 +39,11 @@ cost_df = pd.DataFrame({
     "Amount (£)": [pna_cost, site_remediation_cost, total_cost_with_contingency - total_cost]
 })
 st.bar_chart(cost_df.set_index("Cost Component"))
+
+# --- Email Capture ---
+st.header("Sign Up for Updates / Interest Form")
+
+# Embed Google Form
+components.html("""
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeOS9Hxj-pdyYV7eU53qFsk9uj-O4gZhtLYR3auN7qaqZ_p4w/viewform?embedded=true" width="640" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+""", height=800)
