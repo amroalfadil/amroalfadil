@@ -61,7 +61,7 @@ if st.button("Submit"):
         client = gspread.authorize(creds)
 
         # Open your Google Sheet by name
-        sheet = client.open("Oil & Gas Well Decommissioning Estimator").sheet1
+        sheet = client.open("streamlit-sheets").sheet1
 
         # Append data
         sheet.append_row([first_name, last_name, email, str(datetime.now())])
