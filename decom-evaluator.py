@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit.components.v1 as components
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 st.title("Oil & Gas Well Decommissioning Estimator")
 
@@ -43,8 +46,25 @@ st.bar_chart(cost_df.set_index("Cost Component"))
 
 # --- Email Capture ---
 st.header("Sign Up for Updates / Interest Form")
+st.write("Leave your details if you want updates or future access to the app.")
 
-# Embed Google Form
-components.html("""
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeOS9Hxj-pdyYV7eU53qFsk9uj-O4gZhtLYR3auN7qaqZ_p4w/viewform?embedded=true" width="640" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-""", height=800)
+# Input fields
+first_name = st.text_input("First Name")
+last_name = st.text_input("Last Name")
+email = st.text_input("Email")
+
+if st.button("Submit"):
+    if first_name and last_name and email:
+        # --- Google Sheets setup ---
+        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_name("streamlit-gsheet-491513-f99372b33541.json", scope)
+        client = gspread.authorize(creds)
+
+        # Open your Google Sheet by name
+        sheet = client.open("Oil & Gas Well Decommissioning Estimator").sheet1
+
+        # Append data
+        sheet.append_row([first_name, last_name, email, str(datetime.now())])
+        st.success("Thank you! Your information has been recorded.")
+    else:
+        st.error("Please fill in all fields.")
