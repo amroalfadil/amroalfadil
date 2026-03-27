@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import streamlit.components.v1 as components
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import gspread
+from google.oauth2.service_account import Credentials
 
 st.title("Oil & Gas Well Decommissioning Estimator")
 
@@ -44,7 +43,7 @@ cost_df = pd.DataFrame({
 })
 st.bar_chart(cost_df.set_index("Cost Component"))
 
-# --- Email Capture ---
+# --- Email Capture Section ---
 st.header("Sign Up for Updates / Interest Form")
 st.write("Leave your details if you want updates or future access to the app.")
 
@@ -55,16 +54,24 @@ email = st.text_input("Email")
 
 if st.button("Submit"):
     if first_name and last_name and email:
-        # --- Google Sheets setup ---
-        scope = ["https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name("decomm.json", scope)
-        client = gspread.authorize(creds)
+        try:
+            # --- Google Sheets setup using Streamlit Secrets ---
+            creds = Credentials.from_service_account_info(
+                st.secrets["gcp_service_account"],
+                scopes=[
+                    "https://www.googleapis.com/auth/spreadsheets",
+                    "https://www.googleapis.com/auth/drive"
+                ]
+            )
+            client = gspread.authorize(creds)
 
-        # Open your Google Sheet by name
-        sheet = client.open("streamlit-sheets").sheet1
+            # Open your Google Sheet by name
+            sheet = client.open("streamlit-sheets").sheet1
 
-        # Append data
-        sheet.append_row([first_name, last_name, email, str(datetime.now())])
-        st.success("Thank you! Your information has been recorded.")
+            # Append data
+            sheet.append_row([first_name, last_name, email, str(datetime.now())])
+            st.success("Thank you! Your information has been recorded.")
+        except Exception as e:
+            st.error(f"Error connecting to Google Sheets: {e}")
     else:
         st.error("Please fill in all fields.")
